@@ -11,6 +11,7 @@ import api from '../utils/api';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
+import InfoToolTip from './InfoToolTip';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
@@ -19,6 +20,10 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+
+  const [isInfoToolTipPopupOpen, setIsInfoToolTipPopupOpen] = useState(false);
+
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -48,6 +53,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsInfoToolTipPopupOpen(false);
     setSelectedCard(null);
   }
 
@@ -173,6 +179,12 @@ function App() {
             card={selectedCard}
             isOpen={selectedCard}
             onClose={closeAllPopups}
+          />
+
+          <InfoToolTip
+            isOpen={isInfoToolTipPopupOpen}
+            onClose={closeAllPopups}
+            isSuccess={isSuccess}
           />
         </div>
       </div>
