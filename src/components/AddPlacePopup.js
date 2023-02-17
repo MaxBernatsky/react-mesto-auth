@@ -36,7 +36,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         required
         minLength='2'
         maxLength='30'
-        id='place-link-input'
+        id='place-link-input-name'
         onChange={handleChangeName}
         value={name || ''}
       />
@@ -47,7 +47,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         name='link'
         placeholder='Ссылка на картинку'
         required
-        id='place-link-input'
+        id='place-link-input-descr'
         onChange={handleChangeLink}
         value={link || ''}
       />

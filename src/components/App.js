@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -9,6 +9,8 @@ import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
 import ProtectedRoute from './ProtectedRoute';
+import Login from './Login';
+import Register from './Register';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
@@ -28,7 +30,7 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -123,6 +125,7 @@ function App() {
           <Header />
           <Routes>
             <Route
+              exact
               path='/'
               element={
                 <ProtectedRoute
@@ -140,6 +143,12 @@ function App() {
             />
             <Route path='/sign-up' element={<Register />} />
             <Route path='/sign-in' element={<Login />} />
+            <Route
+              path='*'
+              element={
+                loggedIn ? <Navigate to='/' /> : <Navigate to='/sign-in' />
+              }
+            />
           </Routes>
           {loggedIn && <Footer />}
           <EditProfilePopup
