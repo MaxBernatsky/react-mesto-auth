@@ -125,8 +125,6 @@ function App() {
       .authorize(email, password)
       .then((res) => {
         localStorage.setItem('jwt', res.token);
-        handleInfoToolTip();
-        setIsSuccess(true);
         setLoggedIn(true);
         setEmail(email);
         navigate('/');
@@ -193,7 +191,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className='root' id='root'>
         <div className='page'>
-          <Header handleSignOut={handleSignOut} />
+          <Header handleSignOut={handleSignOut} email={email} />
           <Routes>
             <Route
               path='/'
