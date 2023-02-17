@@ -1,9 +1,26 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Register = () => {
+const Register = ({ handleRegister }) => {
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+  });
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    handleRegister(userData);
   };
+
   return (
     <div className='register'>
       <h2 className='register__title'>Регистрация</h2>
@@ -12,17 +29,21 @@ const Register = () => {
           id='user-email'
           type='email'
           className='register__input'
-          name='registerEmail'
+          name='email'
           placeholder='Email'
           required
+          value={userData.email || ''}
+          onChange={handleChange}
         />
         <input
           id='user-password'
           type='password'
           className='register__input'
-          name='registerPassword'
+          name='password'
           placeholder='Пароль'
           required
+          onChange={handleChange}
+          value={userData.password || ''}
         />
         <button className='register__button' type='submit'>
           Зарегистрироваться

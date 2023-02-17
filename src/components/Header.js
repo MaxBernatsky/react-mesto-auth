@@ -1,6 +1,6 @@
 import { Link, Routes, Route } from 'react-router-dom';
 
-function Header() {
+function Header({ handleSignOut }) {
   return (
     <header className='header'>
       <a href='#' className='header__logo'></a>
@@ -24,7 +24,10 @@ function Header() {
         <Route
           path='/'
           element={
-            <Link to='/sign-in' className='header__link'>
+            <Link
+              to='/sign-in'
+              className='header__link'
+              onClick={handleSignOut}>
               Выйти
             </Link>
           }

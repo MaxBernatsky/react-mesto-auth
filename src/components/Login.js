@@ -1,6 +1,54 @@
-const Login = () => {
+import { useState } from 'react';
+
+const Login = ({ handleLogin }) => {
+  // const [userData, setUserData] = useState({
+  //   email: '',
+  //   password: '',
+  // });
+
+  // function handleChange(e) {
+  //   const { email, value } = e.target;
+
+  //   setUserData({
+  //     ...userData,
+  //     [email]: value,
+  //   });
+  // }
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   if (!userData.email || !userData.password) {
+  //     return;
+  //   }
+  //   console.log('click');
+  //   handleLogin(userData).then(() => {
+  //     setUserData({
+  //       email: '',
+  //       password: '',
+  //     }).catch((error) => {
+  //       console.log(error);
+  //     });
+  //   });
+  // };
+
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+  });
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    handleLogin(userData);
   };
   return (
     <div className='login'>
@@ -10,17 +58,21 @@ const Login = () => {
           id='user-email'
           type='email'
           className='login__input'
-          name='loginEmail'
+          name='email'
           placeholder='Email'
           required
+          onChange={handleChange}
+          value={userData.email || ''}
         />
         <input
           id='user-password'
           type='password'
           className='login__input'
-          name='loginPassword'
+          name='password'
           placeholder='Пароль'
           required
+          onChange={handleChange}
+          value={userData.password || ''}
         />
         <button className='login__button' type='submit'>
           Войти

@@ -12,6 +12,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import InfoToolTip from './InfoToolTip';
+import * as auth from '../utils/auth';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
@@ -35,7 +36,9 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
 
-  // const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+
+  const navigate = useNavigate();
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -47,6 +50,10 @@ function App() {
 
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
+  }
+
+  function handleInfoToolTip() {
+    setIsInfoToolTipPopupOpen(true);
   }
 
   function closeAllPopups() {
@@ -113,25 +120,82 @@ function App() {
       .catch((error) => console.log(error));
   }
 
-  useEffect(() => {
-    Promise.all([api.getUserProfile(), api.getInitialCards()])
-      .then(([userData, cards]) => {
-        setCurrentUser(userData);
-        setCards(cards);
+  function handleLogin({ email, password }) {
+    auth
+      .authorize(email, password)
+      .then((res) => {
+        localStorage.setItem('jwt', res.token);
+        handleInfoToolTip();
+        setIsSuccess(true);
+        setLoggedIn(true);
+        setEmail(email);
+        navigate('/');
       })
       .catch((error) => {
+        handleInfoToolTip();
+        setIsSuccess(false);
         console.log(error);
       });
-  }, []);
+  }
+
+  function handleRegister({ email, password }) {
+    auth
+      .register(email, password)
+      .then(() => {
+        handleInfoToolTip();
+        setIsSuccess(true);
+        navigate('/sign-in');
+      })
+      .catch((error) => {
+        handleInfoToolTip();
+        setIsSuccess(false);
+        console.log(error);
+      });
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem('jwt');
+    navigate('/sign-in');
+    setLoggedIn(false);
+    setEmail('');
+  }
+
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth
+        .checkToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail(res.data.email);
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      Promise.all([api.getUserProfile(), api.getInitialCards()])
+        .then(([userData, cards]) => {
+          setCurrentUser(userData);
+          setCards(cards);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='root' id='root'>
         <div className='page'>
-          <Header />
+          <Header handleSignOut={handleSignOut} />
           <Routes>
             <Route
-              exact
               path='/'
               element={
                 <ProtectedRoute
@@ -147,8 +211,14 @@ function App() {
                 />
               }
             />
-            <Route path='/sign-up' element={<Register />} />
-            <Route path='/sign-in' element={<Login />} />
+            <Route
+              path='/sign-up'
+              element={<Register handleRegister={handleRegister} />}
+            />
+            <Route
+              path='/sign-in'
+              element={<Login handleLogin={handleLogin} />}
+            />
             <Route
               path='*'
               element={
