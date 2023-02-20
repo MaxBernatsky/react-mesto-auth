@@ -1,37 +1,6 @@
 import { useState } from 'react';
 
 const Login = ({ handleLogin }) => {
-  // const [userData, setUserData] = useState({
-  //   email: '',
-  //   password: '',
-  // });
-
-  // function handleChange(e) {
-  //   const { email, value } = e.target;
-
-  //   setUserData({
-  //     ...userData,
-  //     [email]: value,
-  //   });
-  // }
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   if (!userData.email || !userData.password) {
-  //     return;
-  //   }
-  //   console.log('click');
-  //   handleLogin(userData).then(() => {
-  //     setUserData({
-  //       email: '',
-  //       password: '',
-  //     }).catch((error) => {
-  //       console.log(error);
-  //     });
-  //   });
-  // };
-
   const [userData, setUserData] = useState({
     email: '',
     password: '',
